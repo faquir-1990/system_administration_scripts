@@ -26,7 +26,7 @@ class Color:
 
 header = Color.HEADER+'\033[1m'+\
 '''*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~**~*~**~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~\n\
-Kekappa 0.1 ... An nmap automation  lauding Keka Ferdousy\n\
+Kekappy 0.1 ... An nmap automation  lauding Keka Ferdousy\n\
 *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~**~*~**~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~\
 '''+Color.END
 
