@@ -1,0 +1,93 @@
+#=====================================================
+# My simple conky configuration for fedora
+# ethernet/wifi name  and release info location 
+# will vary from distro to distro
+#           -Faquir Foysol
+#           August 26, 2017, Friday 1.10am
+#=====================================================
+
+
+#=========== Window Settings ==========================
+background no
+font  FreeMono:bold:size=10
+use_xft yes
+xftalpha 0.9
+update_interval 1.0
+total_run_times 0
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_argb_visual yes
+own_window_class override
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+minimum_size 220 5
+maximum_width 220
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders yes
+default_color white
+default_shade_color black
+default_outline_color green
+alignment top_right
+gap_x 12
+gap_y 35
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+override_utf8_locale no
+uppercase no # set to yes for all cap
+
+
+
+# ================== Text Displays =====================
+
+TEXT
+${color white}Box Info ${hr 1}${color}
+# this location varies in distros.
+${exec cat /etc/fedora-release}
+Kernel: $alignr$kernel
+Uptime: $alignr$uptime
+Temperatures: ${hr 1}
+CPU: ${alignr}${freq} MHz
+# must have lm-sensors and hddtemp installed 
+CPU temp: ${exec sensors | grep "CPU Temperature:"| awk '{print $3 }' | sed 's/[^0-9\.]//g'}'C
+core_0: ${exec sensors | grep  "Core 0" | awk '{print $3}' | sed 's/[^0-9\.]//g'}'C
+core_1: ${exec sensors | grep "Core 1"| awk '{print $3}' | sed 's/[^0-9\.]//g'}'C 
+# hdd name and temp
+HDD: ${exec hddtemp | awk '{print $2 $3}'}
+Processes: ${alignr}$processes ($running_processes running)
+Load: ${alignr}$loadavg
+${color green}
+CPU1 ${alignr}${cpu cpu1}%
+${cpugraph cpu1 }
+CPU2 ${alignr}${cpu cpu2}%
+${cpugraph cpu2 }
+${color green}
+Ram ${alignr}$mem / $memmax ($memperc%)
+${membar 4 mem}
+${color }
+swap ${alignr}$swap / $swapmax ($swapperc%)
+${swapbar 4}
+Highest CPU $alignr CPU% MEM%
+${top name 1}$alignr${top cpu 1}${top mem 1}
+${top name 2}$alignr${top cpu 2}${top mem 2}
+${top name 3}$alignr${top cpu 3}${top mem 3}
+Highest MEM $alignr CPU% MEM%
+${top_mem name 1}$alignr${top_mem cpu 1}${top_mem mem 1}
+${top_mem name 2}$alignr${top_mem cpu 2}${top_mem mem 2}
+${top_mem name 3}$alignr${top_mem cpu 3}${top_mem mem 3}
+
+${color grey}HDD ${hr 1}${color grey}
+
+${color white}root: ${alignr}${fs_free /} / ${fs_size /}
+${color cyan}${fs_bar 4 /}
+${color white}home: ${alignr}${fs_free /home} / ${fs_size /home}
+${color cyan}${fs_bar 4 /home}
+
+${color white}NETWORK ${hr 1}
+dhcp ip:${addr enp1s0} 
+Down ${downspeed enp1s0}  ${alignr}Up ${upspeed enp1s0:} 
+${downspeedgraph enp1s0  25,107} ${alignr}${upspeedgraph enp1s0 25,107}
+Total ${totaldown enp1s0} ${alignr}Total ${totalup enp1s0}
