@@ -13,7 +13,7 @@
 # 4. And obviously you need to customise the script for better performance. 
 # 5. Make sure you've installed sensors, hddtemp and bc (check your package manager)
 # *** BUG:currently hdd temperature is not being logged in. delete log deletes all logs 
-      rather than oly this script's one.
+#      rather than oly this script's one.
 #
 #      -Faquir Foysol on  August 24,2017, Thursday 3:51 PM (A product of Shell Learning Good Days)
 #================================================================================================================
