@@ -16,7 +16,7 @@
 function diskuse(){
 
     GB=1024.00  #MB
-    # cut by:       user, UId field 1, 3;        UID >= 10; pick user name  
+    # cut by:       user, UId field 1, 3;        UID >= 100; pick user name  
     for usr in $(cut -d':' -f1,3 /etc/passwd | awk -F':' '$2 >=100 {print $1}')
         do
             
