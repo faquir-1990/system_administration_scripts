@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# check if net is up internally 
+
+# ip route output is
+#default via 192.168.0.1 dev eth0  proto static  metric 1024 
+#192.168.0.0/24 dev eth0  proto kernel  scope link  src 192.168.0.106 
+
+
+
+# so grep default and cut the space delimeter of field 3
+
+function check_router(){
+    
+    router_ip=$(ip route | grep "default" | cut -d" " -f3)
+    #echo "$router_ip"
+    echo -n "pinging gateway $router_ip...."
+     
+    ping -c 3 $router_ip > /dev/null
+    # echo "$?"
+    # if the return value in shell is zero or successful operation
+    if [ $? -eq 0 ] 
+        then
+            
+            echo -e "\n\e[1;32m[+]connected to LAN\e[0m"
+
+   else
+            echo -e "\n\e[1;31m[!]not connected.\e[0m"
+   fi
+   return;
+      
+}
+
+function check_net(){
+    
+    echo -n "pinging quora.com for external connection"
+    
+    ping -c 3 quora.com > /dev/null
+    if [ $? -eq 0 ] ; then 
+        echo -e "\n\e[1;32m[+]connected to internet"
+        
+        echo "dhcp ip: `ip addr | grep "eth0" | grep "inet" | awk '{print $2}'`"
+    else
+        echo -e "\n\e[1;31mnot connected to internet\e[0m"
+    fi
+    
+    return;
+}
+
+check_router
+check_net
