@@ -1,0 +1,93 @@
+#!/bin/bash
+
+#==========================================================================================
+# Golton 0.1 is a simple script, collection of my frequently used commands after login
+# into my box. More edits coming soon. 
+#   
+#   Faquir Foysol
+#   December 2, 2017 Sunday
+#   Good Old Days of Learning Systems Programmings
+#==========================================================================================
+
+
+printf "\033c" # literally clear the screen
+
+# ----------------- Date Time info -------------------
+_time=`date`
+echo -e "\e[1;32mDate:\e[0m $_time" 
+
+uptime=`uptime | awk '{print $3 $4}' | cut -f1 -d , `
+echo -e "\e[1;32muptime Day(s)/(H:M)-> \e[0m($uptime)"
+
+# ----------------------------------------------------
+
+
+# -------------- User Info ----------------------
+iAm=`whoami`
+echo -e "\e[1;32mI am:\e[0m $iAm"
+sp=${groups}
+logged=`who`
+echo -e "\e[1;32mLogged Users: \e[0m"
+echo "$logged"
+# ----------------------------------------------
+
+# -------------------- OS Info ------------------
+
+echo -e "\e[1;32mOS Info [Dist Release KernVersion]: \e[0m"
+
+declare -a commands=("-o" "-r" "-v")
+for command in "${commands[@]}"
+    do
+        echo `uname $command`
+    done    
+
+# check net connection
+
+# ----------------------- CPU Info ---------------------
+
+CPU=$(lscpu  | grep "Arch\|Model name\|^CPU(s)")
+echo -e "\e[1;32mCPU: \e[0m"   
+echo "$CPU"
+
+# ----------- Memory Info -------------
+
+echo -e "\e[1;32mRAM:\e[0m"
+total=$(cat /proc/meminfo | grep "^MemTotal"| awk '{print $2}' )
+free=$(cat /proc/meminfo | grep "^MemFree"| awk '{print $2}' )
+Mtotal=`echo "scale=2;$total / (1024 *1024) " | bc`
+Mfree=`echo "scale=2;$free / (1024*1024)" |bc`
+used=`echo "scale=2; $Mtotal - $Mfree"|bc`
+echo "total: $Mtotal Gib"
+echo "used: $used Gib"
+echo "free: $Mfree Gib"
+
+
+# --------- Disk Info --------------------
+diskU=`df -h  | grep "File\|^/dev/sd*"` 
+echo -e "\e[1;32mDisk Use [*Mounted]: \e[0m"
+echo "$diskU"
+
+check_net() {
+    
+     ping -q -c 1 -W 1  8.8.8.8  >/dev/null 
+}
+
+check_net
+if [ $? -eq 0  ] ; then 
+    echo -e "\e[1;32mNet Status:[+]Connected\e[0m"
+    gateway=$(ip route | grep "default" | cut -d" " -f3)
+    echo -e "\e[1;32mgateway(router) IP:\e[0m $gateway"
+    localIP=`hostname -I`
+    echo -e "\e[1;32mlocal IP:\e[0m $localIP"
+    pubIP=`dig +short myip.opendns.com @resolver1.opendns.com`
+    echo -e "\e[1;32mpublic IP:\e[0m $pubIP"
+else
+     echo -e "\e[1;33mNet Status:[-]Not Connected\e[0m"   
+     #echo "$?"
+
+fi
+
+# ------- Frequently used service daemons ---------- 
+_ssh=$(systemctl status ssh.service | sed -n 3p | cut -d":" -f2)
+echo -e "\e[1;32mSSH daemon: \e[0m"
+echo "$_ssh"
