@@ -1,0 +1,96 @@
+#!/bin/bash
+
+#++ Description:  
+
+#######################  README ##################################
+# An interactive bash wrapper for my most commonly used
+# nmap commands.
+# You may add an function to add the getway or change the 
+# variable by hand.
+#
+# Faquir Foysol                 Date: 16 Sept, 2019 11:00PM
+##################################################################
+
+
+
+# Code starts from  here .... 
+
+
+# Function to show help
+
+show_usage(){
+    
+    echo "[!] Please run as sudo or root"
+   
+    echo "Usage ----- "
+    echo " 1 for ping scan the LAN (-sP) with MAC addresses "
+    echo " 2 for TCP SYN Scan the given host IP (-sS 192.168.x.y) "
+    echo " 3 for OS detection of the given host IP (-O 192.168.x.y)"
+    echo " 4 for services running on the given host (-sV 192.168.0.x.y)"
+    echo "for more interesting details plz visit https://nmap.org/book/man.html"
+    exit 
+}
+
+
+
+# if not root then show help and exit
+
+if [ "$EUID" -ne 0 ]; then
+    show_usage
+    exit
+
+fi    
+
+# change gateway IP according to your own LAN config
+
+
+GATEWAY="192.168.0.1"
+
+# Print interactive options ...
+
+echo "1) Ping Scan LAN (-sP) 2) TCP SYN scan (-sS) [needs IP]"
+echo "3) OS detection (-O) [needs IP] 4) service/version detection (-sV) [needs IP]"
+echo "5) Version detection (-A) [needs IP]"
+echo
+echo "Your Gateway IP is $GATEWAY"
+echo -n "enter option: "
+
+
+# read user input 
+read OPT
+
+echo 
+
+case $OPT in
+    
+    1) GATEWAY+="/24" 
+       nmap -sP $GATEWAY 
+       ;;
+    
+    2)  echo -n "IP: "
+        read IP
+        nmap -sS $IP
+       ;;
+    
+   3) echo -n "IP: "
+       read IP 
+       nmap -O $IP 
+      ;;
+    
+   4) echo -n "IP: "
+       read IP
+       nmap -sV $IP  
+      ;;
+   
+  5) echo -n "IP: "
+       read IP
+       nmap -A $IP  
+       ;;
+
+
+    *) echo "Please, add your own option"
+       show_usage
+       ;;
+esac    
+
+# ### END
