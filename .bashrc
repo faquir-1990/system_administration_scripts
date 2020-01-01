@@ -1,6 +1,6 @@
 # color list
 
-export COLOR_NC='\e[1m' # No Color
+export COLOR_NC='\e[0m' # No Color
 export COLOR_WHITE='\e[2;37m'
 export COLOR_BLACK='\e[1;30m'
 export COLOR_BLUE='\e[1;34m'
