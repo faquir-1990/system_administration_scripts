@@ -1,0 +1,72 @@
+#!/bin/bash
+
+#++ Description:  
+
+#######################  README #################################################
+# A simple bash script for finding frequently used binaries 
+# in a system after a fresh install .............................
+#
+# Faquir Foysol              Date: January 1, 2020 Wed [Happy Fucking New Year]
+##################################################################################
+
+
+    # Important references for farther study
+    # https://unix.stackexchange.com/questions/68694/when-is-double-quoting-necessary
+    # https://linuxconfig.org/how-to-use-arrays-in-bash-script
+    # https://linuxize.com/post/how-to-compare-strings-in-bash/
+
+# Code starts from  here .... 
+
+###################### COLORS ######################################
+export COLOR_NC='\e[0m' # No Color
+export COLOR_RED='\e[1;31m'
+####################################################################
+
+# frequently used packages and searched porn keywords !!!!
+
+my_packages=( "su"
+              "sudo"  
+              "python"
+              "vim"
+              "firefox"
+              "vlc"
+              "femdom"
+              "busty"
+              "milf"
+              "curvy"
+              "cougar"
+            )
+
+
+
+declare -a to_install  # declare an indexed array of packages to be installed            
+
+for package in "${my_packages[@]}"; do
+   
+    status=$(whereis $package | cut -d':' -f2) 
+    # take the 2nd field of the output say--- [1]vim: [2]/usr/bin/vim 
+    #echo $status 
+
+    if [ "$status"  ]; then
+        echo "[+] $package is installed"
+    fi
+
+    
+    if [ -z "$status"  ]; then # if the status variable is null
+        echo "[-] $package is not installed"
+        to_install+=($package) # append an uninstalled package 
+    fi
+
+   done
+
+
+echo -e "${COLOR_RED}[!]following packages will be installed" 
+echo "${to_install[*]}"   
+
+read -p "[!] proceed ? [Y/n]" proceed 
+
+echo -e "${COLOR_NC}"
+
+if [ "$proceed" == "Y" ]; then
+    echo -e "${COLOR_NC}[+] OK .. Now handle the task to your package manager..."
+fi    
